@@ -4,28 +4,27 @@
 # portable CMakelists.txt
 #
 # Local tool paths and commands  (Varies by installation)
+REFLEX_LIB = /usr/local/lib/libreflex.a
 CCOPTS = -L /usr/local/lib
-# REFLEX_LIB = /usr/local/lib/libreflex.a
 REFLEX_INCLUDE = /usr/local/include/reflex
 REFLEX = reflex
-PRODUCT = ../bin/lexer
-CC = g++ -std=c++11
+# CC = g++ -std=c++11 -stdlib=libc++
+CC = g++
+PRODUCT = ../bin/py_strip
 
 default: lexer
 
-%.o: %.cpp lex.yy.h
-	$(CC) -c -I $(REFLEX_INCLUDE) $^
+lex.yy.cpp:	py_strip.lxx
+	$(REFLEX) --nodefault $^
 
-lex.yy.cpp lex.yy.h:	quack.lxx  quack.tab.hxx
-	$(REFLEX) --bison-cc --bison-locations --header-file quack.lxx
+lexer: ../bin/py_strip
 
-lexer:  lex_driver.cpp  lex.yy.cpp ASTNode.cpp  Messages.cpp
+../bin/py_strip:  lex.yy.cpp
 	$(CC) $^ -o ${PRODUCT} -I $(REFLEX_INCLUDE) $(CCOPTS) -lreflex
-
-# There should be more dependencies for the header files, but I'm lazy.
 
 clean:
 	rm -f *.o
-	rm -f lex.yy.cpp lex.yy.h
+	rm -f lex.yy.cpp
 	rm -f ${PRODUCT}
+
 

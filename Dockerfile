@@ -3,10 +3,10 @@
 # and the RE/flex lexical analyzer builder.
 #
 # To build:
-#    docker build --tag=proj1 .
+#    docker build --tag=proj0 .
 #
 # To run in the resulting Docker container:
-#   docker run -it proj1
+#   docker run -it proj0
 #
 FROM michalyoung/cis461:base
 COPY . /usr/src/proj1
