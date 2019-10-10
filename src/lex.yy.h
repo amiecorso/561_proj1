@@ -79,6 +79,8 @@ class Lexer : public reflex::AbstractLexer<reflex::Matcher> {
   }
   static const int INITIAL = 0;
   static const int comment = 1;
+  static const int Q = 2;
+  static const int QQQ = 3;
   virtual void yylloc_update(yy::location& yylloc)
   {
     yylloc.begin.line = static_cast<unsigned int>(matcher().lineno());
