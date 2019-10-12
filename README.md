@@ -17,10 +17,13 @@ and produce a binary in the 'bin' directory.
 
 ## To build and run Docker image:
 `make image`
+
 This will build a Docker image with src code.
 
 `docker run -it proj1`
+
 This will start a Docker container based on the image, lexer binary will already be made.
+
 From interactive session, to run lexer:
 
 `bin/lexer samples/[whatever].qk` 
