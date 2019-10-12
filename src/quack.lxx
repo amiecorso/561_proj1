@@ -146,11 +146,11 @@ not { return parser::token::NOT; }
 [/][*]  { start(comment); }
 <comment>[^*]*   { ; }
 <comment>[*][^/] { ; }
-<comment>[*][/]  { std::cout << "found comment\n"; start(INITIAL); }
+<comment>[*][/]  { start(INITIAL); }
 
 // SINGLE-LINE COMMENTS
 \/\/ { start(eol_comment); }
-<eol_comment>\n   { std::cout << "found comment\n"; start(INITIAL); }
+<eol_comment>\n   { start(INITIAL); }
 <eol_comment>.    { ; }
 
 //TRIPLE QUOTED STRING
