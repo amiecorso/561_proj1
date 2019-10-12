@@ -71,9 +71,9 @@ std::string BAD_NL_STR =
     * JFlex/Cup do not let you do this in Java.
     * Here are a few ... there are more. 
     */
-[-+*/><]  { return text()[0]; }
+
 // TODO: negative
-// TODO: the rest of the punctuation?
+[-+*/><{}=(),;.:]  { return text()[0]; }
 /*
 { } // Used to mark the beginning and end of a class or statement block.
 = // Used to indicate assignment. I pronounce this symbol “gets”.
@@ -154,9 +154,10 @@ not { return parser::token::NOT; }
 
 
 // TODO: TRIPLE QUOTED STRING
-[\"\"\"]      { echo(); start(QQQ); }
+[\"][\"][\"]      { start(QQQ); }
 // anything at all can appear here??
-<QQQ>[\"\"\"] { echo(); start(INITIAL); }
+<QQQ>[\"][\"][\"] { start(INITIAL); }
+<QQQ>[.]* {yylval.str = strdup(text()); return parser::token::STRING_LIT; }
 
 // TODO: STRING LITERAL
 \"    { echo(); start(Q); }
@@ -170,7 +171,7 @@ not { return parser::token::NOT; }
        " at line " + std::to_string(lineno()) +
        ", column " + std::to_string(columno()));
    }
-   
+
 %%
 
 /* No main program here */ 
