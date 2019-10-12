@@ -160,7 +160,7 @@ not { return parser::token::NOT; }
 
 //SINGLE QUOTED STRING
 [\"]    { start(Q); }
-<Q>\n     { report::error(BAD_NL_STR); }
+<Q>\n     { report::error(BAD_NL_STR); start(INITIAL); }
 <Q>[\\][0btnrf\"\\] { string_buf = string_buf + text(); }
 <Q>[\"]   { yylval.str = strdup(string_buf.c_str()); string_buf = ""; start(INITIAL); return parser::token::STRING_LIT; }
 <Q>[\\].  { report::error(BAD_ESC_MSG); }
