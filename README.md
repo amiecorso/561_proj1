@@ -1,4 +1,4 @@
-#  proj1
+#  proj1 - Amie Corso
 C++ (bison, re-flex) version of project 1, scanner (aka lexer)
 
 ## To build 
