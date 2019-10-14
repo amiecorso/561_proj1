@@ -153,19 +153,23 @@ not { return parser::token::NOT; }
 <eol_comment>\n   { start(INITIAL); }
 <eol_comment>.    { ; }
 
-//TRIPLE QUOTED STRING
+/*TRIPLE QUOTED STRING*/
 [\"][\"][\"]      { start(QQQ); }
-<QQQ>[\"][\"][\"] { start(INITIAL); }
-<QQQ>[.]* { yylval.str = strdup(text()); return parser::token::STRING_LIT; }
+<QQQ><<EOF>>      { report::error("Encountered EOF before end of string"); }
+<QQQ>[\"][\"][\"] { yylval.str = strdup(string_buf.c_str()); string_buf = ""; start(INITIAL); return parser::token::STRING_LIT; }
+<QQQ>\n           { string_buf += text(); }
+<QQQ>.            { string_buf += text(); }
 
-//SINGLE QUOTED STRING
+
+/*SINGLE QUOTED STRING*/
 [\"]    { start(Q); }
 <Q>\n     { report::error(BAD_NL_STR); start(INITIAL); }
-<Q>[\\][0btnrf\"\\] { string_buf = string_buf + text(); }
+//<Q><<EOF>> { report::error("Encountered EOF before end of string"); }
+<Q>[\\][0btnrf\"\\] { string_buf += text(); }
 <Q>[\"]   { yylval.str = strdup(string_buf.c_str()); string_buf = ""; start(INITIAL); return parser::token::STRING_LIT; }
 <Q>[\\].  { report::error(BAD_ESC_MSG); }
-<Q>[.]    { string_buf = string_buf + text(); }
-// TODO: do we need to account for EOF occurring between quotes?
+<Q>.    { string_buf += text(); }
+
 
 <<EOF>>  { return EOF; }
 
